@@ -1,9 +1,9 @@
-pipeline{
+node('slaves') {
 	stages {
 		stage('Checkout'){
 			checkout scm
 		}
-		stag ('update lambda') {
+		stage('update lambda') {
 			withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS_ACCESS_KEY_ID', 
 					  AWS_ACCESS_KEY_ID : 'AWS_ACCESS_KEY_ID', AWS_SECRET_ACCESS_KEY : 'AWS_SECRET_ACCESS_KEY']]) {
 				dir("files") {
