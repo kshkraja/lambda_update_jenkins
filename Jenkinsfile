@@ -1,4 +1,7 @@
 pipeline {
+	agent {
+		node { label 'slave' }
+	}
 	stage('Checkout'){
 		checkout scm
 		}
