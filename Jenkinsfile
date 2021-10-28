@@ -1,82 +1,66 @@
-def region = 'ap-south-1'
-
-
 pipeline{
 	stages {
+		stage('Checkout'){
+			checkout scm
+		}
 		stag ('update lambda') {
 			withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS_ACCESS_KEY_ID', 
 					  AWS_ACCESS_KEY_ID : 'AWS_ACCESS_KEY_ID', AWS_SECRET_ACCESS_KEY : 'AWS_SECRET_ACCESS_KEY']]) {
-				dir("supplychain-procurementsrvc-ocdpuller-001/src")
-				
-			
-			}
-			
-		
+				dir("files") {
+					sh "pwd";
+					sh "zip -r lambda_function.zip *";
+					sh "chmod 777 *";
+					sh "aws lambda update-function-code --function-name welcome --zip-file fileb://lambda_function.zip --region ap-south-1";				
+				}
+			}		
 		}
-		sh "pwd";
-		sh "zip -r lambda_function.zip *";
-		
-		
 	}
-
-
-
 }
 
-steps {
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'nonprod-supplychain-temp']]) {
-                    script {
-                        sh 'echo  STEP 2 : Update lambda  ====================================='
+// steps {
+//                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'nonprod-supplychain-temp']]) {
+//                     script {
+//                         sh 'echo  STEP 2 : Update lambda  ====================================='
 
-                        if (env.BRANCH_NAME == 'development' || env.BRANCH_NAME.startsWith('dev-')) {
-				prop = readProperties file: 'dev-settings.properties'
-				echo prop.toString();
-				dir("supplychain-procurementsrvc-ocdpuller-001/src") {
-                                sh "pwd";
-								sh "zip -r lambda_function.zip *";
-								sh 'chmod 777 *';
-								sh "aws lambda update-function-code --function-name ${prop.lambdaname} --zip-file fileb://${prop.zipfilename} --region eu-west-1";
-                            }
-                        } else if (env.BRANCH_NAME.startsWith('sit-')) {
-                            prop = readProperties file: 'sit-settings.properties'
-							echo prop.toString();
-                            dir("supplychain-procurementsrvc-ocdpuller-001/src") {
-                                sh "pwd";
-								sh "zip -r lambda_function.zip *";
-								sh 'chmod 777 *';
-								sh "aws lambda update-function-code --function-name ${prop.lambdaname} --zip-file fileb://${prop.zipfilename} --region eu-west-1";
-                            }
-                        } else if (env.BRANCH_NAME.startsWith('pre-')) {
-                            prop = readProperties file: 'pre-settings.properties'
-							echo prop.toString();
-                            dir("supplychain-procurementsrvc-ocdpuller-001/src") {
-                                sh "pwd";
-								sh "zip -r lambda_function.zip *";
-								sh 'chmod 777 *';
-								sh "aws lambda update-function-code --function-name ${prop.lambdaname} --zip-file fileb://${prop.zipfilename} --region eu-west-1";
-                            }
-                        } else if (env.BRANCH_NAME.startsWith('uat-')) {
-                            prop = readProperties file: 'uat-settings.properties'
-							echo prop.toString();
-                            dir("supplychain-procurementsrvc-ocdpuller-001/src") {
-                                sh "pwd";
-								sh "zip -r lambda_function.zip *";
-								sh 'chmod 777 *';
-								sh "aws lambda update-function-code --function-name ${prop.lambdaname} --zip-file fileb://${prop.zipfilename} --region eu-west-1";
-                            }
-                        }
-                    }
-                }
- 
-
-
-
-
-
-
-
-
-
+//                         if (env.BRANCH_NAME == 'development' || env.BRANCH_NAME.startsWith('dev-')) {
+// 				prop = readProperties file: 'dev-settings.properties'
+// 				echo prop.toString();
+// 				dir("supplychain-procurementsrvc-ocdpuller-001/src") {
+//                                 sh "pwd";
+// 				sh "zip -r lambda_function.zip *";
+// 				sh 'chmod 777 *';
+// 				sh "aws lambda update-function-code --function-name ${prop.lambdaname} --zip-file fileb://${prop.zipfilename} --region eu-west-1";
+//                             }
+//                         } else if (env.BRANCH_NAME.startsWith('sit-')) {
+//                             prop = readProperties file: 'sit-settings.properties'
+// 							echo prop.toString();
+//                             dir("supplychain-procurementsrvc-ocdpuller-001/src") {
+//                                 sh "pwd";
+// 								sh "zip -r lambda_function.zip *";
+// 								sh 'chmod 777 *';
+// 								sh "aws lambda update-function-code --function-name ${prop.lambdaname} --zip-file fileb://${prop.zipfilename} --region eu-west-1";
+//                             }
+//                         } else if (env.BRANCH_NAME.startsWith('pre-')) {
+//                             prop = readProperties file: 'pre-settings.properties'
+// 							echo prop.toString();
+//                             dir("supplychain-procurementsrvc-ocdpuller-001/src") {
+//                                 sh "pwd";
+// 								sh "zip -r lambda_function.zip *";
+// 								sh 'chmod 777 *';
+// 								sh "aws lambda update-function-code --function-name ${prop.lambdaname} --zip-file fileb://${prop.zipfilename} --region eu-west-1";
+//                             }
+//                         } else if (env.BRANCH_NAME.startsWith('uat-')) {
+//                             prop = readProperties file: 'uat-settings.properties'
+// 							echo prop.toString();
+//                             dir("supplychain-procurementsrvc-ocdpuller-001/src") {
+//                                 sh "pwd";
+// 								sh "zip -r lambda_function.zip *";
+// 								sh 'chmod 777 *';
+// 								sh "aws lambda update-function-code --function-name ${prop.lambdaname} --zip-file fileb://${prop.zipfilename} --region eu-west-1";
+//                             }
+//                         }
+//                     }
+//                 }
 // pipeline {
 
 //     parameters {
