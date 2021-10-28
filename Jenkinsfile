@@ -2,20 +2,23 @@ pipeline {
 	agent {
 		node { label 'slave' }
 	}
-	stage('Checkout'){
-		checkout scm
+	stages {
+		stage('Checkout'){
+			checkout scm
 		}
-	stage('update lambda') {
-		withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS_ACCESS_KEY_ID',
-				   AWS_ACCESS_KEY_ID : 'AWS_ACCESS_KEY_ID', AWS_SECRET_ACCESS_KEY : 'AWS_SECRET_ACCESS_KEY']]) {
-			dir("files") {
-				sh "pwd";
-				sh "zip -r lambda_function.zip *";
-				sh "chmod 777 *";
-				sh "aws lambda update-function-code --function-name welcome --zip-file fileb://lambda_function.zip --region ap-south-1";
+		stage('update lambda') {
+			withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS_ACCESS_KEY_ID',
+					  AWS_ACCESS_KEY_ID : 'AWS_ACCESS_KEY_ID', AWS_SECRET_ACCESS_KEY : 'AWS_SECRET_ACCESS_KEY']]) {
+				dir("files") {
+					sh "pwd";
+					sh "zip -r lambda_function.zip *";
+					sh "chmod 777 *";
+					sh "aws lambda update-function-code --function-name welcome --zip-file fileb://lambda_function.zip --region ap-south-1";
+					}
 				}
 			}
-		}
+	}
+	
 }
 
 
