@@ -1,4 +1,23 @@
+def region = 'ap-south-1'
+
+
 pipeline{
+	stages {
+		stag ('update lambda') {
+			withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS_ACCESS_KEY_ID', 
+					  AWS_ACCESS_KEY_ID : 'AWS_ACCESS_KEY_ID', AWS_SECRET_ACCESS_KEY : 'AWS_SECRET_ACCESS_KEY']]) {
+				dir("supplychain-procurementsrvc-ocdpuller-001/src")
+				
+			
+			}
+			
+		
+		}
+		sh "pwd";
+		sh "zip -r lambda_function.zip *";
+		
+		
+	}
 
 
 
@@ -10,9 +29,9 @@ steps {
                         sh 'echo  STEP 2 : Update lambda  ====================================='
 
                         if (env.BRANCH_NAME == 'development' || env.BRANCH_NAME.startsWith('dev-')) {
-							prop = readProperties file: 'dev-settings.properties'
-							echo prop.toString();
-                            dir("supplychain-procurementsrvc-ocdpuller-001/src") {
+				prop = readProperties file: 'dev-settings.properties'
+				echo prop.toString();
+				dir("supplychain-procurementsrvc-ocdpuller-001/src") {
                                 sh "pwd";
 								sh "zip -r lambda_function.zip *";
 								sh 'chmod 777 *';
