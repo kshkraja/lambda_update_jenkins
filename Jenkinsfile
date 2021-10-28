@@ -10,8 +10,7 @@ pipeline {
 		}
 		stage('update lambda') {
 			steps{
-				withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS_ACCESS_KEY_ID',
-						  AWS_ACCESS_KEY_ID : 'AWS_ACCESS_KEY_ID', AWS_SECRET_ACCESS_KEY : 'AWS_SECRET_ACCESS_KEY']]) {
+				withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'accesskey_secretkey']]) {
 					dir("files") {
 						sh "pwd";
 						sh "zip -r lambda_function.zip *";
