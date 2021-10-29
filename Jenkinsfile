@@ -13,7 +13,7 @@ pipeline {
 				withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'accesskey_secretkey']]) {
 					dir("files") {
 						sh "pwd";
-						sh "yum install zip";
+						//sh "yum install zip";
 						//bat "sudo yum install zip";
 						bat "zip -r lambda_function.zip *";
 						bat "chmod 777 *";
