@@ -15,7 +15,7 @@ pipeline {
 						sh "pwd";
 						//sh "yum install zip";
 						//bat "sudo yum install zip";
-						sh "- apt-get install zip";
+						sh "apt-get install zip";
 						sh "zip -r lambda_function.zip *";
 						sh "chmod 777 *";
 						sh "aws lambda update-function-code --function-name welcome --zip-file fileb://lambda_function.zip --region ap-south-1";
