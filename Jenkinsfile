@@ -12,6 +12,7 @@ pipeline {
 			steps{
 				withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'accesskey_secretkey']]) {
 					dir("files") {
+						sh 'echo building....';
 						sh "pwd";
 						//sh "yum install zip";
 						//bat "sudo yum install zip";
